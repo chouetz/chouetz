@@ -1,6 +1,6 @@
-### Hello, I'm Nicolas
+## Hello, I'm Nicolas
 
-## I'm a professional engineer in computer science, currently System Architect on CI/CD pipelines.
+### I'm a professional engineer in computer science, acting as System Architect on CI/CD pipelines.
 
 - I graduated from ISAE Supaero 🦉 (ENSICA cursus) in 2005.
 - I worked for Airbus ✈️, Thales Alenia Space 🛰, then moved to computer science in 2010 and worked for Amadeus 💻 since then.
