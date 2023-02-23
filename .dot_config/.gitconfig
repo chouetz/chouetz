@@ -1,0 +1,50 @@
+[user]
+	email = nicolas.schweitzer@amadeus.com
+	name = Nicolas Schweitzer
+[core]
+  pager = less -FRX
+  # pager = less -FRSX
+  editor = /usr/bin/vim
+  symlinks = true
+[merge]
+  tool = vimdiff
+[diff]
+  tool = vimdiff
+[credential]
+  helper = cache --timeout=86400
+[difftool]
+  prompt = false
+[alias]
+  a = !sh -c 'git commit -a --amend --no-edit && git push -f $1 $2' -
+  aa = add -A
+  b = branch
+  c = commit
+#  d = difftool
+  d = !sh -c 'git branch -D $1 && git push origin :$1'
+  f = fetch
+  h = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short -10
+  l = stash list
+  m = merge
+  n = ls-tree --full-tree -r HEAD
+  o = checkout
+  p = pull
+  pr = !sh -c 'git fetch $1 pull-requests/$2/from:pr-$2 && git checkout pr-$2' -
+  r = remote -v
+  rr = rebase --continue
+  s = status -uno
+  t = stash save
+  u = status -u
+  v = branch -vv
+  w = diff -w
+[http]
+  postBuffer = 524288000
+	sslCAPath = /etc/ssl/certs/
+[push]
+  default = simple
+[core]
+  excludesFile = ~/.gitignore
+[fetch]
+  # Remove any remote-tracking references that no longer exist on the remote when fetching
+  prune = true
+[rebase]
+  autostash = true
