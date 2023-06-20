@@ -1,10 +1,11 @@
 ## Hello, I'm Nicolas
 
-### I'm a professional engineer in computer science, acting as System Architect on CI/CD pipelines.
+### I'm a professional engineer in computer science, acting as Agent Platform Software Developer in DataDog.
 
 - I graduated from ISAE Supaero 🦉 (ENSICA cursus) in 2005.
-- I worked for Airbus ✈️, Thales Alenia Space 🛰, then moved to computer science in 2010 and worked for Amadeus 💻 since then.
-- I love coding, and participate to codingame events or riddle solving on my spare time. I'm looking to collaborate on open-source project, started some work on cpython
+- I worked for Airbus ✈️, Thales Alenia Space 🛰, in IT for Amadeus 💻 from 2010 and switched to DataDog :dog: in 2023.
+- I specialized in all that concerns CI/CD, DevOps, and software delivery lifecycle automation.
+- I love coding, and participate to codingame events or riddle solving on my spare time.
 - I love sport 🏉
 
 ### You can reach me here:
