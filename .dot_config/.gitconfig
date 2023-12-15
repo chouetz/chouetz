@@ -1,11 +1,16 @@
 [user]
-	email = nicolas.schweitzer@amadeus.com
+	email = nicolas.schweitzer@datadoghq.com
 	name = Nicolas Schweitzer
+	signingkey = ssh-ed25519 *** nicolas.schweitzer+git-commit-signing@datadoghq.com
 [core]
   pager = less -FRX
   # pager = less -FRSX
   editor = /usr/bin/vim
   symlinks = true
+# [url "git@github.com:"]
+#   insteadOf = https://github.com/
+# [url "ssh://git@github.com/"]
+#     insteadOf = https://github.com/
 [merge]
   tool = vimdiff
 [diff]
@@ -15,36 +20,48 @@
 [difftool]
   prompt = false
 [alias]
-  a = !sh -c 'git commit -a --amend --no-edit && git push -f $1 $2' -
+  a = !sh -c 'git commit -a --amend --no-edit && git push -f' -
   aa = add -A
   b = branch
   c = commit
-#  d = difftool
   d = !sh -c 'git branch -D $1 && git push origin :$1'
   f = fetch
   h = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short -10
   l = stash list
+  ls = ls-files
   m = merge
   n = ls-tree --full-tree -r HEAD
   o = checkout
   p = pull
-  pr = !sh -c 'git fetch $1 pull-requests/$2/from:pr-$2 && git checkout pr-$2' -
+  po = push origin `mb`
+  pr = !sh -c 'git fetch $1 pull/$2/head:pr-$2 && git checkout pr-$2' -
+  #pr = !sh -c 'git fetch $1 pull-requests/$2/from:pr-$2 && git checkout pr-$2' -
+  # ps = push origin `git branch | grep '\*' | cut -d' ' -f2`
   r = remote -v
-  rr = rebase --continue
-  s = status -uno
+  rb = rebase --continue
+  s = status -s
   t = stash save
-  u = status -u
   v = branch -vv
   w = diff -w
+  ws = diff -w --staged
 [http]
   postBuffer = 524288000
 	sslCAPath = /etc/ssl/certs/
 [push]
   default = simple
+  autoSetupRemote = true
 [core]
   excludesFile = ~/.gitignore
+  hooksPath = /usr/local/dd/global_hooks
 [fetch]
   # Remove any remote-tracking references that no longer exist on the remote when fetching
   prune = true
 [rebase]
   autostash = true
+[commit]
+	gpgsign = true
+[tag]
+	forceSignAnnotated = true
+[gpg]
+	program = /Users/nicolas.schweitzer/.local/bin/yubinotif
+	format = ssh
