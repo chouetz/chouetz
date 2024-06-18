@@ -2,57 +2,68 @@
 	email = nicolas.schweitzer@datadoghq.com
 	name = Nicolas Schweitzer
 	signingkey = ssh-ed25519 *** nicolas.schweitzer+git-commit-signing@datadoghq.com
+[alias]
+  a = !sh -c 'git commit -a --amend --no-edit && git push --force-with-lease' -
+  am = commit -a --amend --no-edit
+  all = add -A
+  b = branch -vv
+  c = commit -am
+  d = !sh -c 'git branch -D "$1" && git push origin :"$1"' -
+  e = commit -m 'Empty commit' --allow-empty
+  f = fetch
+  h = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short -10
+  k = diff --name-only --diff-filter=U
+  l = stash list
+  last = log --pretty=format:\"%h %ad | %s%d [%an]\" --all -2 --
+  ls = ls-files
+  m = machete
+  n = ls-tree --full-tree -r HEAD
+  nb = !sh -c 'git switch -c nschweitzer/$1' -
+  o = switch
+  p = pull
+  pf = push --force-with-lease
+  pr = !sh -c 'git fetch $1 pull/$2/head:pr-$2 && git checkout pr-$2' -
+  pt = push origin tag
+  # pr = !sh -c 'git fetch $1 pull-requests/$2/from:pr-$2 && git checkout pr-$2' -
+  r = remote -v
+  rbc = !sh -c '[[ $(git grep \"<<<<<<\" | wc -l) -eq 0 ]] && (git add -A && git rebase --continue) || git grep \"<<<<<\"' -
+  rbm = rebase origin/main
+  rbi = !sh -c 'git rebase -i HEAD~"${1:-10}"' -
+  rh = reset HEAD --hard
+  s = status -s
+  t = !sh -c 'git stash apply stash@{$1}' -
+  v = branch -vv
+  w = !sh -c '[[ $(git diff --name-only | wc -l) -gt 0 ]] && git diff -w || [[ $(git diff --name-only --cached | wc -l) -gt 0 ]] && git diff -w --staged' -
+  x = !sh -c 'git reset --hard HEAD~"${1:-1}"' -
 [core]
   pager = less -FRX
-  # pager = less -FRSX
   editor = /usr/bin/vim
   symlinks = true
 # [url "git@github.com:"]
 #   insteadOf = https://github.com/
 # [url "ssh://git@github.com/"]
 #     insteadOf = https://github.com/
+  excludesFile = ~/.gitignore
+	hooksPath = /usr/local/dd/global_hooks
 [merge]
   tool = vimdiff
 [diff]
-  tool = vimdiff
-[credential]
-  helper = cache --timeout=86400
+  #tool = vimdiff
+  tool = difftastic
 [difftool]
   prompt = false
-[alias]
-  a = !sh -c 'git commit -a --amend --no-edit && git push -f' -
-  aa = add -A
-  b = branch
-  c = commit
-  d = !sh -c 'git branch -D $1 && git push origin :$1'
-  f = fetch
-  h = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short -10
-  l = stash list
-  ls = ls-files
-  m = merge
-  n = ls-tree --full-tree -r HEAD
-  o = checkout
-  p = pull
-  po = push origin `mb`
-  pr = !sh -c 'git fetch $1 pull/$2/head:pr-$2 && git checkout pr-$2' -
-  #pr = !sh -c 'git fetch $1 pull-requests/$2/from:pr-$2 && git checkout pr-$2' -
-  # ps = push origin `git branch | grep '\*' | cut -d' ' -f2`
-  r = remote -v
-  rb = rebase --continue
-  s = status -s
-  t = stash save
-  v = branch -vv
-  w = diff -w
-  ws = diff -w --staged
+[difftool "difftastic"]
+  cmd = difft "$LOCAL" "$REMOTE"
+[pager]
+  difftool = true
+[credential]
+  helper = cache --timeout=86400
 [http]
   postBuffer = 524288000
 	sslCAPath = /etc/ssl/certs/
 [push]
   default = simple
   autoSetupRemote = true
-[core]
-  excludesFile = ~/.gitignore
-  hooksPath = /usr/local/dd/global_hooks
 [fetch]
   # Remove any remote-tracking references that no longer exist on the remote when fetching
   prune = true
@@ -62,6 +73,16 @@
 	gpgsign = true
 [tag]
 	forceSignAnnotated = true
+[grep]
+  lineNumber = true
 [gpg]
 	program = /Users/nicolas.schweitzer/.local/bin/yubinotif
 	format = ssh
+[rerere]
+	enabled = true
+[columi]
+	ui = auto
+[branch]
+	sort = -committerdate
+[maintenance]
+	repo = /Users/nicolas.schweitzer/go/src/github.com/DataDog/datadog-agent

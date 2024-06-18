@@ -1,6 +1,7 @@
 # ----------Generic useful methods ----------#
 pp () {
-  source ~/workspaces/venv/bin/activate
+  cd ~/workspaces/tests/scripts/python || exit
+  pyenv activate
   python
 }
 gt() {
@@ -17,7 +18,7 @@ pac() {
 }
 flush_branch() {
   dry_run=$1
-  git fetch
+  git pull
   for branch in $(git branch --format='%(refname:short)'); do
     is_remote=$(git branch -r --list "origin/${branch}")
     if [[ -z ${is_remote} ]]; then
@@ -37,6 +38,17 @@ for_sed() {
   for file in $(git grep "$1" | cut -d":" -f1 | sort -u); do
     sed -i "" "s/$1/$2/g" "$file";
   done
+}
+sortu() {
+  sort -u "$1" > tmp && mv tmp "$1"
+}
+ggn() {
+  git grep -n "$1"
+}
+ptest() {
+  black "$1"
+  isort "$1"
+  flake8 "$1"
 }
 
 # ---------- Revive specific --------#

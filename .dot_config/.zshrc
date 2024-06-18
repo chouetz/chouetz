@@ -100,8 +100,10 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+
 # ------------ Perso ------------
 export PATH=~/workspaces/tests/bin:$PATH
+#export PYTHONPATH=~/workspaces/ddog/ddqa/src/:$PYTHONPATH
 source methods.sh
 export LSCOLORS="ExfxcxdxBxegecabagacad"
 export GREP_OPTIONS='--color=auto'
@@ -121,6 +123,8 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
+alias methods="vi ~/workspaces/tests/bin/methods.sh"
+alias ge='git grep'
 export HISTIGNORE="&:ls:lt:ll:la:b:exit"
 #source ~/.git-completion.bash
 fpath=(~/.zsh $fpath)
@@ -129,3 +133,10 @@ autoload -Uz compinit && compinit
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 export PULUMI_CONFIG_PASSPHRASE=i-love-testing-my-application
 source ~/workspaces/tests/bin/inv_completion
+export LANG=en_GB.UTF-8
+# -- Tools -- #
+#[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && source /opt/homebrew/etc/profile.d/autojump.sh
+#[[ -s /opt/homebrew/etc/autojump.sh ]] && source brew --prefix/etc/autojump.sh
+source <(fzf --zsh)
+eval "$(zoxide init zsh)"
+eval "$(starship init zsh)"
