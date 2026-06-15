@@ -5,10 +5,31 @@ pp () {
   python
 }
 gt() {
-  cd "$(find -L ~/workspaces -type d -maxdepth 2 -iname "*${1}*" | sort | head -1)" || exit
+  cd "$(find -L ~/workspaces/"${2}" -type d -maxdepth 2 -iname "*${1}*" | sort | head -1)" || exit
 }
-git_file() {
-  git grep -i "$1" | cut -d ':' -f 1 | sort -u
+cl() {
+  # Extract worktree name from current path if in a worktree
+  local title="Claude Code"
+  local args=("$@")
+  for ((i=1; i<=${#args[@]}; i++)); do
+    if [[ "${args[$i]}" == "-w" ]]; then
+      title="CC ${args[$((i+1))]}"
+      break
+    fi
+  done
+  # Set iTerm2 tab title
+  echo -ne "\e]1;${title}\a"
+  command claude "$@"
+  # Reset title after exit
+  echo -ne "\e]1;\a"
+}
+wt() {
+  if pwd | grep -q worktree; then
+    cd ../../../
+  fi;
+  if [ -n "$1" ]; then
+    cd "$(find -L .claude/worktrees/ -type d -maxdepth 2 -iname "*${1}*" | sort | head -1)" || exit
+  fi
 }
 pac() {
   if which -s deactivate > /dev/null 2>&1; then
@@ -16,14 +37,21 @@ pac() {
   fi
   source venv/bin/activate
 }
+gdep() {
+  git g "$1" | grep go.mod
+}
 flush_branch() {
   dry_run=$1
+  git switch main
+  if [ $? -eq 128 ]; then
+    git switch master
+  fi
   git pull
   for branch in $(git branch --format='%(refname:short)'); do
     is_remote=$(git branch -r --list "origin/${branch}")
     if [[ -z ${is_remote} ]]; then
       if [[ -n ${dry_run} ]]; then
-        echo "Remove ${branch}"
+        echo "git branch -D ${branch}"
       else
         git branch -D "${branch}"
       fi
@@ -31,8 +59,8 @@ flush_branch() {
   done
 }
 github_repos() {
-  pattern=$1
-  curl -sH "Accept: application/vnd.github.text-match+json" -H "Authorization: Bearer $TOKEN" "https://api.github.com/search/code?q=$pattern&type=code" | jq ".items[].repository.html_url" | sort -u
+  pattern=$(jq -rn --arg x "$1" '$x|@uri')
+  curl -sH "Accept: application/vnd.github.text-match+json" -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/search/code?q=$pattern&type=code" | jq ".items[].repository.html_url" | sort -u
 }
 for_sed() {
   for file in $(git grep "$1" | cut -d":" -f1 | sort -u); do
@@ -41,9 +69,6 @@ for_sed() {
 }
 sortu() {
   sort -u "$1" > tmp && mv tmp "$1"
-}
-ggn() {
-  git grep -n "$1"
 }
 ptest() {
   black "$1"

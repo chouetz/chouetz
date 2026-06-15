@@ -1,0 +1,156 @@
+{
+  "alwaysThinkingEnabled": false,
+  "attribution": {
+    "commit": ""
+  },
+  "enabledPlugins": {
+    "dd-octo-sts@datadog-claude-plugins": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "perf-feedback@datadog-claude-plugins-dev": false,
+    "rewrite@datadog-claude-plugins": true,
+    "skill-creator@claude-plugins-official": true
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "command": "workmux set-window-status waiting",
+            "type": "command"
+          }
+        ],
+        "matcher": "permission_prompt|elicitation_dialog"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "workmux set-window-status working",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "/Users/nicolas.schweitzer/.claude/hooks/rtk-rewrite.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "command": "/Users/nicolas.schweitzer/.claude/hooks/session-end-cmux.sh",
+            "timeout": 5,
+            "type": "command"
+          }
+        ],
+        "matcher": ""
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "/Users/nicolas.schweitzer/.claude/hooks/session-clear-reset-counter.sh",
+            "timeout": 5,
+            "type": "command"
+          }
+        ],
+        "matcher": "clear"
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "/Users/nicolas.schweitzer/.claude/hooks/pr-merged-warn.sh",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": ""
+      },
+      {
+        "hooks": [
+          {
+            "command": "workmux set-window-status done",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "/Users/nicolas.schweitzer/.claude/hooks/cmux-naming.sh",
+            "timeout": 5,
+            "type": "command"
+          }
+        ],
+        "matcher": ""
+      },
+      {
+        "hooks": [
+          {
+            "command": "workmux set-window-status working",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "WorktreeCreate": [
+      {
+        "hooks": [
+          {
+            "command": "/Users/nicolas.schweitzer/.claude/hooks/worktree-create.sh",
+            "timeout": 10,
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "WorktreeRemove": [
+      {
+        "hooks": [
+          {
+            "command": "/Users/nicolas.schweitzer/.claude/hooks/worktree-remove.sh",
+            "type": "command"
+          }
+        ],
+        "matcher": ""
+      }
+    ]
+  },
+  "model": "sonnet",
+  "permissions": {
+    "allow": [
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git mv *)",
+      "Bash(git add *)",
+      "Bash(git checkout *)",
+      "Bash(git switch *)",
+      "Bash(git rebase *)",
+      "Bash(git pull *)",
+      "Bash(git stash *)",
+      "Bash(cmux rename-workspace *)",
+      "Bash(cmux rename-tab *)",
+      "Bash(cmux workspace-action *)"
+    ],
+    "deny": [
+      "Bash(git push --force *)",
+      "Bash(git reset --hard *)",
+      "Bash(git clean -f *)"
+    ]
+  },
+  "skipDangerousModePermissionPrompt": true
+}

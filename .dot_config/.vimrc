@@ -77,6 +77,14 @@ set splitbelow
 "Prefer split on the right with :vsplit
 set splitright
 
+" Break line
+function! BreakHere()
+    s/^\(\s*\)\(.\{-}\)\(\s*\)\(\%#\)\(\s*\)\(.*\)/\1\2\r\1\4\6
+    call histdel("/", -1)
+endfunction
+
+nnoremap z :<C-u>call BreakHere()<CR>
+
 "Highlight tab in current file
 highlight TabLine ctermbg=Blue
 match TabLine /\t/

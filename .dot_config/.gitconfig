@@ -4,7 +4,7 @@
   ap = !sh -c 'git commit -a --amend --no-edit && git push --force-with-lease' -
   amend = commit -a --amend --no-edit
   aa = add -A
-  b = !sh -c 'git switch -c nschweitzer/$1' -
+  b = !sh -c 'git switch -c "$USER"/"$1" --no-track origin/"$(git default)"' -
   bd = branch -D
   c = commit -am
   cont = "!f() { git add -u; if [[ -n $(ls .git | grep rebase-) ]]; then git rebase --continue; elif [[ -n $(ls .git | grep CHERRY) ]]; then git cherry-pick --continue; else git merge --continue;fi }; f"
@@ -13,9 +13,12 @@
   d = !sh -c 'git diff -w HEAD~"$1" "${2+--name-only}"' -
   default = !git rev-parse --abbrev-ref origin/HEAD | sed 's|^origin/||'
   delete = !sh -c 'git branch -D "$1" && git push origin :"$1"' -
+  delete-tag = !sh -c 'git tag -d "$1" && git push origin :"$1"' -
   empty = commit -m 'Empty commit' --allow-empty
+  fcp = !sh -c 'git commit -am \"$1\" --no-verify && git push --force-with-lease --no-verify' -
   filematch = !sh -c ' git grep -i "$1" | cut -d ":" -f 1 | sort -u' -
   flush = "!f() { git switch $(git default); git pull; for branch in $(git branch --format='%(refname:short)'); do if [[ -z "$(git branch -r --list "origin/${branch}")" ]]; then git branch -D "$branch";fi;done; }; f"
+  fpf = push --force-with-lease --no-verify
   fwd = "!f() { git pull --rebase origin "${1:-$(git default)}"; }; f"
   g = grep -i
   h = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short -10
@@ -37,7 +40,7 @@
   pt = push origin tag
   # pr = !sh -c 'git fetch $1 pull-requests/$2/from:pr-$2 && git checkout pr-$2' -
   r = remote -v
-  rbc = !sh -c '[[ $(git grep -I \"<<<<<<\" | wc -l) -eq 0 ]] && (git add -A && git rebase --continue) || git grep -I \"<<<<<\"' -
+  rbc = !sh -c '[[ $(git grep -I \"<<<<<<\" | grep -v patches.md | wc -l) -eq 0 ]] && (git add -A && git rebase --continue) || git grep -I \"<<<<<\" | grep -v patches.md' -
   rework = "!f() { if [[ ${#1} -gt 3 ]]; then git rebase -i $1; else git rebase -i HEAD~"${1:-10}"; fi; }; f"
   rh = reset HEAD --hard
   sp = stash push -p -m
@@ -46,6 +49,9 @@
   tagcommit = rev-list -n 1
   v = branch -vv
   w = "!f() { git status -s && sleep 1; if [[ $(git diff --name-only | wc -l) -gt 0 ]]; then git diff -w; fi; if [[ $(git diff --name-only --cached | wc -l) -gt 0 ]]; then git diff -w --staged; fi; }; f"
+  wta = !sh -c 'git worktree add --no-track -b "$USER/$1" .claude/worktrees/"$1" origin/main' -
+  wtd = !sh -c 'git worktree remove $(pwd)/.claude/worktrees/"$1"' -
+  wtl = worktree list
   when-deleted = !git log --all -1 --
   x = !sh -c 'git reset --hard HEAD~"${1:-1}"' -
 [branch]
@@ -127,3 +133,11 @@
   name = Nicolas Schweitzer
 	email = nicolas.schweitzer@datadoghq.com
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKEHyc9wJwPw0vf6QtAk+nCE8l4VrQd0womvCl2h9yOY nicolas.schweitzer+git-commit-signing@datadoghq.com
+[include]
+	path = /Users/nicolas.schweitzer/.config/datadog/git/config
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
